@@ -1,0 +1,63 @@
+<h1>Register</h1>
+
+<p>
+    <b>Name:</b><input id="name" />
+</p>
+<p>
+    <b>Email:</b><input id="email" />
+</p>
+<p>
+    <b>Rno:</b><input id="rno" />
+</p>
+
+<p>
+    <b>Address:</b><textarea id="add"></textarea>
+</p>
+
+<p>
+    <button onclick="fnRegister()">Register</button>
+</p>
+
+<script>
+    function fnRegister(){
+        var name=document.getElementById('name').value;
+        var rno=document.getElementById('rno').value;
+        var add=document.getElementById('add').value;
+        var email=document.getElementById('email').value;
+        
+
+        //AJAX
+        var dataObj = {
+            "email":email // RequestBody
+        }
+        var obj=new XMLHttpRequest();
+        obj.open('post','http://127.0.0.1:5000/std-reg/'+rno+'?name'+name);// rno is the path paremeter,name is the query parameter
+        obj.setRequestHeader("add",add);// RequestHeader
+        obj.setRequestHeader("content-Type",'application/json')//JSON Data
+        //convert JSON in to string
+        obj.send(JSON.stringify(dataObj));
+        obj.onload=function(){
+            var result=obj.responseText;
+            result= JSON.parse(result);// convert the string in to JSON
+            if(result.cnt==1){
+                alert('sucessfully inserted')
+            document.getElementById('name').value='';
+            document.getElementById('rno').value='';
+            document.getElementById('add').value='';
+            document.getElementById('email').value='';
+            }
+            else{
+                alert ('not inserted ... try again')
+            }
+            
+        }
+
+        obj.onerror=function(){
+                  
+            alert('something got wrong');
+        }
+
+    }
+</script>
+
+
